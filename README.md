@@ -1,0 +1,1 @@
+A Tic Tac Toe game built using TypeScript, HTML, and CSS.
