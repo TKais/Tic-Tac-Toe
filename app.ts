@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-	console.log('LOADED');
 
 	class Player {
 		name:string;
