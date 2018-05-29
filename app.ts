@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			const moves = cells.filter( (cell) => {
 				return cell.classList.contains(playerTurn.letter);
 			});
-			
+
 			const total:number = moves.reduce((acc, move) => {
 				return acc += move.cellIndex;
 			}, 0);
@@ -93,6 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		endGame():void {
 			const messageContainer = document.getElementById('game-over');
 			const gameMessage = `${this.winner} has won the game!`;
+
+			this.node.removeEventListener('click', this.handleClick.bind(this));
+			this.node.removeEventListener('keydown', this.handleKeydown.bind(this));
 
 			messageContainer.textContent = gameMessage;
 		}

@@ -55,10 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
         TicTacToe.prototype.checkIfWinner = function (playerTurn) {
             var cells = Array.from(this.cells);
             var moves = cells.filter(function (cell) {
-                console.log('CELL', cell);
                 return cell.classList.contains(playerTurn.letter);
             });
-            console.log(moves);
             var total = moves.reduce(function (acc, move) {
                 return acc += move.cellIndex;
             }, 0);
@@ -70,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
         TicTacToe.prototype.endGame = function () {
             var messageContainer = document.getElementById('game-over');
             var gameMessage = this.winner + " has won the game!";
+            this.node.removeEventListener('click', this.handleClick.bind(this));
+            this.node.removeEventListener('keydown', this.handleKeydown.bind(this));
             messageContainer.textContent = gameMessage;
         };
         TicTacToe.prototype.markSquare = function (cell) {
