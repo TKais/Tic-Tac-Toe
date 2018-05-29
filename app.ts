@@ -2,13 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	console.log('LOADED');
 
 	class Player {
+		name:string;
 		letter:string;
-		moves:object[];
-		winner:object;
-		constructor(letter:string) {
+		moves:number;
+		constructor(name:string, letter:string) {
+			this.name = name;
 			this.letter = letter;
-			this.moves = [];
-			this.winner = null;
+			this.moves = 0;
 		}
 	}
 
@@ -17,13 +17,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		node:any;
 		player1:Player;
 		player2:Player;
-		turn:object;
+		winner:any;
+		turn:Player;
+		cells:any;
 		constructor() {
 			this.selectedSquares = 0;
 			this.node = document.getElementById('board');
-			this.player1 = new Player('x');
-			this.player2 = new Player('o');
+			this.player1 = new Player('Player 1', 'x');
+			this.player2 = new Player('Player 2', 'o');
+			this.cells = document.getElementsByTagName('td');
 			this.turn = this.player1;
+			this.winner = null;
 		}
 
 		attachEvents():void {
@@ -36,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if(cell.tagName.toLowerCase() === 'td') {
 				this.markSquare(cell);
-				this.checkGameStatus();
 			}
 		}
 
@@ -46,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			if(enterOrSpace && cell.tagName.toLowerCase() === 'td') {
 				this.markSquare(cell);
-				this.checkGameStatus();
 			}
 		}
 
@@ -55,17 +57,44 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 
 		checkGameStatus():void {
+			const playerTurn = this.turn;
+
+			if(playerTurn.moves >= 3) {
+				const isAWinner:boolean = this.checkIfWinner(playerTurn);
+				if(isAWinner) {
+					this.winner = playerTurn.name;
+					this.endGame();			
+				}
+			}
 			
 			if(this.selectedSquares === 9) {
+				this.winner = 'No one';
 				this.endGame();
 			}
 		}
 
+		checkIfWinner(playerTurn):boolean {
+			const cells:any[] = Array.from(this.cells);
+			const moves = cells.filter( (cell) => {
+				return cell.classList.contains(playerTurn.letter);
+			});
+			
+			const total:number = moves.reduce((acc, move) => {
+				return acc += move.cellIndex;
+			}, 0);
+
+			if(total === 0 || total === 3 || total === 6) {
+				return true;
+			}
+
+			return false;
+		}
+
 		endGame():void {
 			const messageContainer = document.getElementById('game-over');
-			const winner = 
-			const gameMessage = 
+			const gameMessage = `${this.winner} has won the game!`;
 
+			messageContainer.textContent = gameMessage;
 		}
 
 		markSquare(cell):void {
@@ -75,6 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			if(!cell.classList.contains('x') && !cell.classList.contains('o') ) {
 				cell.classList.add(playerClass);
 				this.selectedSquares++;
+				playerTurn.moves++;
+				this.checkGameStatus();
 				this.switchTurns();
 			}
 		}
