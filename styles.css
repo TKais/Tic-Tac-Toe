@@ -1,0 +1,37 @@
+html, body {
+	box-sizing: border-box;
+}
+
+#board {
+	width: 40rem;
+	height: 40rem;
+	border: 2px solid black;
+	table-layout: fixed;
+}
+
+#board td, tr {
+	border: 2px solid black;
+	cursor: pointer;
+}
+
+td {
+	position: relative;
+}
+
+.x:after {
+	content: "\274c";
+	position: absolute;
+	top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.o:after {
+	content: "\004F";
+	color: #000000;
+	font-weight: bold;
+	position: absolute;
+	top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
